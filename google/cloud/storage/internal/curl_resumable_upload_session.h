@@ -33,6 +33,11 @@ class CurlResumableUploadSession : public ResumableUploadSession {
                                       std::string session_id)
       : client_(std::move(client)), session_id_(std::move(session_id)) {}
 
+  explicit CurlResumableUploadSession(std::shared_ptr<CurlClient> client,
+                                      std::string session_id, CustomHeader custom_header)
+      : client_(std::move(client)), session_id_(std::move(session_id)),
+      custom_header_(custom_header) {}
+
   StatusOr<ResumableUploadResponse> UploadChunk(
       ConstBufferSequence const& buffers) override;
 
@@ -44,6 +49,8 @@ class CurlResumableUploadSession : public ResumableUploadSession {
   std::uint64_t next_expected_byte() const override;
 
   std::string const& session_id() const override { return session_id_; }
+
+  CustomHeader const& custom_header() const { return custom_header_; }
 
   bool done() const override { return done_; }
 
@@ -57,6 +64,7 @@ class CurlResumableUploadSession : public ResumableUploadSession {
 
   std::shared_ptr<CurlClient> client_;
   std::string session_id_;
+  CustomHeader custom_header_;
   std::uint64_t next_expected_ = 0;
   bool done_ = false;
   StatusOr<ResumableUploadResponse> last_response_;
