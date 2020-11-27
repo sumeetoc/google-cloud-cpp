@@ -30,11 +30,7 @@ namespace internal {
 class CurlResumableUploadSession : public ResumableUploadSession {
  public:
   explicit CurlResumableUploadSession(std::shared_ptr<CurlClient> client,
-                                      std::string session_id)
-      : client_(std::move(client)), session_id_(std::move(session_id)) {}
-
-  explicit CurlResumableUploadSession(std::shared_ptr<CurlClient> client,
-                                      std::string session_id, CustomHeader custom_header)
+                                      std::string session_id, CustomHeader custom_header = CustomHeader())
       : client_(std::move(client)), session_id_(std::move(session_id)),
       custom_header_(custom_header) {}
 
